@@ -6,6 +6,13 @@ module.exports = function() {
             type: String,
             required: true
         },
+        login: {
+            type: String,
+            required: true,
+            trim: true,
+            index: true,
+            unique: true
+        },
         email: {
             type: String,
             required: true,
