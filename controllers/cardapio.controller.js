@@ -23,6 +23,20 @@ controller.get = function(req, res) {
     );
 }
 
+controller.getAll = function(req, res) {
+
+    Cardapio.find().exec().then(
+        function(cardapios) {
+            res.json(cardapios);
+        },
+
+        function(e) {
+            console.error(e);
+            res.sendStatus(500).end();
+        }
+    );
+}
+
 controller.post = function(req, res) {
 
     Cardapio.create(req.body).then(
