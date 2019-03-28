@@ -6,7 +6,7 @@ module.exports = function() {
             type: String,
             required: true
         },
-        login: {
+        user: {
             type: String,
             required: true,
             trim: true,
@@ -31,6 +31,6 @@ module.exports = function() {
         }
     });
 
-    return mongoose.model('Usuario', schema, 'Usuarios');
+    return mongoose.model('Usuario', schema, 'usuarios');
 
 }

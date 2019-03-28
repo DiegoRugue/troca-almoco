@@ -1,4 +1,5 @@
-const DiaSemana = require('../models/DiaSemana') ();
+const Troca = require('../models/Troca') ();
+const emailService = require('../services/email.service');
 
 const controller = {};
 
@@ -6,11 +7,11 @@ controller.get = function(req, res) {
 
     const id = req.params.id;
 
-    DiaSemana.findById(id).exec().then(
+    Troca.findById(id).exec().then(
 
-        function(diaSemana) {
-            if(diaSemana) {
-                res.json(diaSemana).end();
+        function(troca) {
+            if(troca) {
+                res.json(troca).end();
             } else {
                 res.sendStatus(404).end();
             }
@@ -23,25 +24,10 @@ controller.get = function(req, res) {
     );
 }
 
-controller.getAll = function(req, res) {
-
-    DiaSemana.find().exec().then(
-        function(diasSemana) {
-            res.json(diasSemana);
-        },
-
-        function(e) {
-            console.error(e);
-            res.sendStatus(500).end();
-        }
-    );
-}
-
 controller.post = function(req, res) {
-
-    DiaSemana.create(req.body).then(
-
+    Troca.create(req.body).then(
         function() {
+            emailService.send('diegorugue@gmail.com', 'Troca do cardapio', global.EMAIL_TMPL2.replace('{0}', req.body.user).replace('{1}', req.body.pratoPrincipal));
             res.sendStatus(201).end();
         },
 
@@ -56,10 +42,10 @@ controller.put = function(req, res) {
 
     const id = req.body._id;
 
-    DiaSemana.findOneAndUpdate({_id: id}, req.body).exec().then(
+    Troca.findOneAndUpdate({_id: id}, req.body).exec().then(
 
-        function(diaSemana) {
-            if(diaSemana){
+        function(troca) {
+            if(troca){
                 res.sendStatus(204).end();
             } else {
                 res.sendStatus(404).end();
@@ -77,9 +63,9 @@ controller.delete = function(req, res) {
 
     const id = req.params.id;
 
-    DiaSemana.findOneAndDelete({_id: id}).exec().then(
-        function(diaSemana) {
-            if(diaSemana) {
+    Troca.findOneAndDelete({_id: id}).exec().then(
+        function(troca) {
+            if(troca) {
                 res.sendStatus(204).end();
             } else {
                 res.sendStatus(404).end();

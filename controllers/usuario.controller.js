@@ -1,6 +1,30 @@
+const md5 = require('md5');
 const Usuario = require('../models/Usuario') ();
+const emailService = require('../services/email.service');
 
 const controller = {};
+
+controller.logar = function(req, res) {
+
+    const user = req.params.user;
+    const senha = md5(req.body.senha + global.SALT_KEY);
+
+    Usuario.findOne({user: user}).exec().then(
+
+        function(user) {
+            if(user.senha == senha) {
+                res.json(user).end();
+            } else {
+                res.sendStatus(404).end();
+            }
+        },
+
+        function(e) {
+            console.error(e);
+            res.sendStatus(500).end();
+        }
+    );
+}
 
 controller.get = function(req, res) {
 
@@ -25,9 +49,14 @@ controller.get = function(req, res) {
 
 controller.post = function(req, res) {
 
-    Usuario.create(req.body).then(
-
+    Usuario.create({
+        nome: req.body.nome,
+        user: req.body.user,
+        email: req.body.email,
+        senha: md5(req.body.senha + global.SALT_KEY)
+    }).then(
         function() {
+            emailService.send(req.body.email, 'Bem vindo ao Cardapio da SMN', global.EMAIL_TMPL.replace('{0}', req.body.nome));
             res.sendStatus(201).end();
         },
 
