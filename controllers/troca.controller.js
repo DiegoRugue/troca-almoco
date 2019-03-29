@@ -24,6 +24,20 @@ controller.get = function(req, res) {
     );
 }
 
+controller.getAll = function(req, res) {
+
+    Troca.find().populate('user', 'nome').populate('cardapio', 'data').exec().then(
+        function(trocas) {
+            res.json(trocas);
+        },
+
+        function(e) {
+            console.error(e);
+            res.sendStatus(500).end();
+        }
+    );
+}
+
 controller.post = function(req, res) {
     Troca.create(req.body).then(
         function() {
