@@ -6,6 +6,14 @@ module.exports = function() {
             type: String,
             required: true
         },
+        opcao1: {
+            type: String,
+            required: true
+        },
+        opcao2: {
+            type: String,
+            required: true
+        },
         guarnicao1: {
             type: String,
             required: true
