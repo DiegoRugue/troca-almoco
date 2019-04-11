@@ -24,6 +24,19 @@ controller.get = function(req, res) {
     );
 }
 
+controller.getUser = function(req, res) {
+    
+    Troca.find(req.body).exec().then(
+        function(usuarios) {
+            res.json(usuarios);
+        },
+        function(e) {
+            console.error(e);
+            res.sendStatus(500).end();
+        }
+    );
+}
+
 controller.getAll = function(req, res) {
 
     Troca.find().populate('user', 'nome').populate('cardapio', 'data').exec().then(
