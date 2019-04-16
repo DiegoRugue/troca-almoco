@@ -1,5 +1,6 @@
 const Troca = require('../models/Troca') ();
 const emailService = require('../services/email.service');
+const Usuario = require('../models/Usuario');
 
 const controller = {};
 
@@ -50,19 +51,17 @@ controller.getAll = function(req, res) {
         }
     );
 }
+controller.post = async function(req, res) {
 
-controller.post = function(req, res) {
-    Troca.create(req.body).then(
-        function() {
-            emailService.send('diegorugue@gmail.com', 'Troca do cardapio', global.EMAIL_TMPL2.replace('{0}', req.body.user).replace('{1}', req.body.pratoPrincipal));
-            res.sendStatus(201).end();
-        },
-
-        function(e) {
-            console.error(e);
-            res.sendStatus(500).end();
-        }
-    );
+    try {
+        await Troca.create(req.body);
+        await Usuario.findById(req.body.user).exec();
+        emailService.send('diegorugue@gmail.com', 'Troca do cardapio', global.EMAIL_TMPL2.replace('{0}', user.nome).replace('{1}', req.body.pratoPrincipal));
+        res.sendStatus(201).end();
+    } catch (e) {
+        console.error(e);
+        res.sendStatus(500).end();
+    }
 }
 
 controller.put = function(req, res) {

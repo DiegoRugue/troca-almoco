@@ -27,4 +27,7 @@ app.use('/cardapio', cardapio);
 const troca = require('./routes/troca.route');
 app.use('/troca', troca);
 
+const feedback = require('./routes/feedback.route');
+app.use('/feedback', feedback);
+
 module.exports = app;

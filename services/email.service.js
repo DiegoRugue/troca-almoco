@@ -1,11 +1,25 @@
 const config = require('../config/config');
-const sendgrid = require('sendgrid')(config.sendgridKey);
 
+// exports.send = async (to, subject, body) => {
+//     await sendgrid.send({
+//         to: to,
+//         from: 'cardapio@teste.com.br',
+//         subject: subject,
+//         html: body
+//     });
+// }
+
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(config.sendgridKey);
 exports.send = async (to, subject, body) => {
-    sendgrid.send({
-        to: to,
-        from: 'cardapio@smn.com.br',
-        subject: subject,
-        html: body
-    });
-}
+    try {
+        await sgMail.send({
+            to: to,
+            from: 'cardapio@teste.com.br',
+            subject: subject,
+            html: body
+        });
+    } catch(e) {
+        console.error(e);
+    }
+};
